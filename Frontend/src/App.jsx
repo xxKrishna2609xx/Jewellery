@@ -17,6 +17,8 @@ import Footer from './components/Footer/Footer';
 import ShopPage from './components/Pages/ShopPage';
 import AuthModal from './components/Auth/AuthModal';
 import AccountModal from './components/Account/AccountModal';
+import GoldEssentialsCarousel from './components/Home/GoldEssentialsCarousel';
+import FloatingConcierge from './components/Widgets/FloatingConcierge';
 
 import { PRODUCTS, CATEGORIES, TESTIMONIALS } from './data/products';
 import { DEFAULT_USER } from './data/mockUser';
@@ -343,6 +345,12 @@ export default function App() {
           {/* Flagship Live Rates Index Widget */}
           <LiveRateBar onOpenCalculator={() => setIsCalculatorOpen(true)} />
 
+          {/* Signature 3D Gold Essentials Coverflow Carousel */}
+          <GoldEssentialsCarousel 
+            onSelectCategory={navigateToShopWithCategory}
+            onExploreAll={() => navigateToShopWithCategory('all')}
+          />
+
           {/* Visual Category Showcase */}
           <CategoryGrid onSelectCategory={navigateToShopWithCategory} />
 
@@ -566,6 +574,9 @@ export default function App() {
         onLogout={handleLogout}
         onExploreShop={() => navigateToShopWithCategory('all')}
       />
+
+      {/* Floating Concierge (Phone & WhatsApp) */}
+      <FloatingConcierge onOpenStoreLocator={() => setIsStoreLocatorOpen(true)} />
 
     </div>
   );
