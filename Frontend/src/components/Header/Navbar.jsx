@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   Search, Heart, ShoppingBag, Calculator, 
-  Menu, X, Sparkles, ChevronDown, Diamond, Home 
+  Menu, X, Sparkles, ChevronDown, Diamond, Home, User 
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/products';
 import { formatINR } from '../../data/goldRates';
@@ -15,6 +15,9 @@ export default function Navbar({
   onOpenCalculator,
   onOpenCart,
   onOpenWishlist,
+  onOpenAuth,
+  onOpenAccount,
+  user = null,
   cartCount = 0,
   wishlistCount = 0,
   cartTotal = 0
@@ -95,7 +98,7 @@ export default function Navbar({
             })}
           </nav>
 
-          {/* Action Tools (Calculator, Search, Wishlist, Cart) */}
+          {/* Action Tools (Calculator, Search, User Auth, Wishlist, Cart) */}
           <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             
             {/* Live Price Calculator Quick Trigger */}
@@ -111,23 +114,49 @@ export default function Navbar({
             {/* Search Trigger */}
             <button
               onClick={onOpenSearch}
-              className="p-2.5 text-stone-700 hover:text-amber-800 hover:bg-[#F2ECE0] rounded-full transition-colors cursor-pointer"
+              className="p-2 text-stone-700 hover:text-amber-800 hover:bg-[#F2ECE0] rounded-full transition-colors cursor-pointer"
               title="Search Jewellery, Diamonds, Coins"
               aria-label="Search"
             >
               <Search className="w-5 h-5" />
             </button>
 
+            {/* User Account / Sign In Trigger */}
+            {user ? (
+              <button
+                onClick={onOpenAccount}
+                className="flex items-center gap-1.5 p-1 sm:px-2.5 sm:py-1 bg-[#FAF3E5] hover:bg-[#F5EAD4] border border-[#E3CEAB] rounded-full text-xs font-semibold text-stone-900 transition-all cursor-pointer shadow-2xs"
+                title="View Account & Track Orders"
+              >
+                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#E6CA85] via-[#C5A059] to-[#8E6928] text-stone-950 flex items-center justify-center text-[10px] font-bold">
+                  {user.name ? user.name[0] : 'U'}
+                </div>
+                <span className="hidden sm:inline font-serif font-bold text-stone-900 text-[11px]">
+                  {user.name.split(' ')[0]}
+                </span>
+              </button>
+            ) : (
+              <button
+                onClick={onOpenAuth}
+                className="p-2 text-stone-700 hover:text-amber-800 hover:bg-[#F2ECE0] rounded-full transition-colors cursor-pointer flex items-center gap-1"
+                title="Sign In / Register"
+                aria-label="Account"
+              >
+                <User className="w-5 h-5" />
+                <span className="hidden xl:inline text-xs font-medium text-stone-700">Login</span>
+              </button>
+            )}
+
             {/* Wishlist Button with Counter */}
             <button
               onClick={onOpenWishlist}
-              className="p-2.5 text-stone-700 hover:text-rose-700 hover:bg-rose-50/60 rounded-full transition-colors relative cursor-pointer"
+              className="p-2 text-stone-700 hover:text-rose-700 hover:bg-rose-50/60 rounded-full transition-colors relative cursor-pointer"
               title="Saved Jewels"
               aria-label="Wishlist"
             >
               <Heart className="w-5 h-5" />
               {wishlistCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-rose-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-rose-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
                   {wishlistCount}
                 </span>
               )}
@@ -159,6 +188,37 @@ export default function Navbar({
         {/* Mobile Navigation Drawer Dropdown */}
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-[#E8DFD3] py-4 bg-[#FAF8F5] animate-in fade-in slide-in-from-top-2 duration-200">
+            
+            {/* Mobile User Status */}
+            <div className="mb-4 pb-3 border-b border-stone-200">
+              {user ? (
+                <button
+                  onClick={() => {
+                    onOpenAccount();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center justify-between w-full p-3 bg-amber-50 rounded-xl border border-amber-200 text-xs text-amber-950 font-bold"
+                >
+                  <div className="flex items-center gap-2">
+                    <User className="w-4 h-4 text-amber-700" />
+                    <span>Account: {user.name}</span>
+                  </div>
+                  <span className="text-[10px] px-2 py-0.5 bg-amber-200 rounded-full">Track Orders</span>
+                </button>
+              ) : (
+                <button
+                  onClick={() => {
+                    onOpenAuth();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="flex items-center justify-center gap-2 w-full py-2.5 bg-stone-900 text-amber-300 font-semibold rounded-xl text-xs"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Sign In / Create Account</span>
+                </button>
+              )}
+            </div>
+
             <div className="grid grid-cols-2 gap-2 mb-4">
               <button
                 onClick={() => {

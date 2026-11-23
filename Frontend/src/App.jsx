@@ -15,8 +15,11 @@ import WishlistDrawer from './components/Wishlist/WishlistDrawer';
 import CheckoutModal from './components/Checkout/CheckoutModal';
 import Footer from './components/Footer/Footer';
 import ShopPage from './components/Pages/ShopPage';
+import AuthModal from './components/Auth/AuthModal';
+import AccountModal from './components/Account/AccountModal';
 
 import { PRODUCTS, CATEGORIES, TESTIMONIALS } from './data/products';
+import { DEFAULT_USER } from './data/mockUser';
 import { formatINR } from './data/goldRates';
 import { 
   Sparkles, Star, Quote, ShieldCheck, 
@@ -24,7 +27,7 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  // Page Routing State ('home' | 'shop')
+  // Page Routing State ('home' | 'shop') - Landing page is ALWAYS default
   const [currentPage, setCurrentPage] = useState('home');
 
   // Navigation & Category state
@@ -43,8 +46,30 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isAccountOpen, setIsAccountOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [checkoutData, setCheckoutData] = useState(null);
+
+  // User Authentication State (Persisted in LocalStorage)
+  const [user, setUser] = useState(() => {
+    try {
+      const saved = localStorage.getItem('aura_user');
+      return saved ? JSON.parse(saved) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Orders State (Persisted in LocalStorage)
+  const [orders, setOrders] = useState(() => {
+    try {
+      const saved = localStorage.getItem('aura_orders');
+      return saved ? JSON.parse(saved) : DEFAULT_USER.initialOrders;
+    } catch {
+      return DEFAULT_USER.initialOrders;
+    }
+  });
 
   // Notification Toast state
   const [toastMessage, setToastMessage] = useState(null);
@@ -89,6 +114,35 @@ export default function App() {
       console.error(e);
     }
   }, [wishlist]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('aura_orders', JSON.stringify(orders));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [orders]);
+
+  // Auth Handlers
+  const handleLoginSuccess = (userData) => {
+    setUser(userData);
+    try {
+      localStorage.setItem('aura_user', JSON.stringify(userData));
+    } catch (e) {
+      console.error(e);
+    }
+    showToast(`Welcome back, ${userData.name}!`);
+  };
+
+  const handleLogout = () => {
+    setUser(null);
+    try {
+      localStorage.removeItem('aura_user');
+    } catch (e) {
+      console.error(e);
+    }
+    showToast('Signed out of your vault account.');
+  };
 
   // Cart Handlers
   const handleAddToCart = (product) => {
@@ -154,8 +208,30 @@ export default function App() {
     setIsCheckoutOpen(true);
   };
 
-  const handleOrderSuccess = () => {
+  // Order Success & Save to History
+  const handleOrderSuccess = (newOrder) => {
     setCart([]);
+    if (newOrder) {
+      setOrders(prev => [newOrder, ...prev]);
+
+      // If user is not yet logged in, auto-link to their order profile
+      if (!user) {
+        const guestUser = {
+          id: 'usr_guest',
+          name: 'Aditi Sharma',
+          phone: '+91 98101 23456',
+          email: 'aditi.sharma@example.com',
+          tier: 'Sovereign Patron',
+          points: 1200
+        };
+        setUser(guestUser);
+        try {
+          localStorage.setItem('aura_user', JSON.stringify(guestUser));
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
   };
 
   // Navigation helpers
@@ -236,7 +312,7 @@ export default function App() {
         onOpenStoreLocator={() => setIsStoreLocatorOpen(true)}
       />
 
-      {/* Luxury Brand Header & Navigation */}
+      {/* Luxury Brand Header & Navigation with User Account integration */}
       <Navbar
         currentPage={currentPage}
         onNavigateHome={navigateToHome}
@@ -246,12 +322,15 @@ export default function App() {
         onOpenCalculator={() => setIsCalculatorOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenWishlist={() => setIsWishlistOpen(true)}
+        onOpenAuth={() => setIsAuthOpen(true)}
+        onOpenAccount={() => setIsAccountOpen(true)}
+        user={user}
         cartCount={cartCount}
         wishlistCount={wishlistCount}
         cartTotal={cartTotal}
       />
 
-      {/* VIEW 1: LANDING PAGE (HOME) */}
+      {/* VIEW 1: LANDING PAGE (HOME) - Preserved as the default landing view */}
       {currentPage === 'home' && (
         <main className="flex-1 animate-in fade-in duration-300">
           
@@ -468,6 +547,24 @@ export default function App() {
         onClose={() => setIsCheckoutOpen(false)}
         checkoutData={checkoutData}
         onOrderSuccess={handleOrderSuccess}
+        onTrackOrder={() => setIsAccountOpen(true)}
+      />
+
+      {/* User Authentication Modal (OTP & Email Login) */}
+      <AuthModal
+        isOpen={isAuthOpen}
+        onClose={() => setIsAuthOpen(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
+
+      {/* User Account & Order History Tracking Modal */}
+      <AccountModal
+        isOpen={isAccountOpen}
+        onClose={() => setIsAccountOpen(false)}
+        user={user}
+        orders={orders}
+        onLogout={handleLogout}
+        onExploreShop={() => navigateToShopWithCategory('all')}
       />
 
     </div>

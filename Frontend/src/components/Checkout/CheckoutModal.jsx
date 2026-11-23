@@ -17,7 +17,8 @@ export default function CheckoutModal({
   isOpen,
   onClose,
   checkoutData,
-  onOrderSuccess
+  onOrderSuccess,
+  onTrackOrder
 }) {
   if (!isOpen || !checkoutData) return null;
 
@@ -57,6 +58,22 @@ export default function CheckoutModal({
       setOrderId(generatedId);
       setStep(3);
 
+      const newOrder = {
+        id: generatedId,
+        date: 'Today, ' + new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }),
+        status: 'Order Confirmed & Vault Packing',
+        statusCode: 1, // Hallmarking & Vault packing
+        statusDescription: 'Order confirmed and verified. Inscribing laser BIS 916 HUID hallmark.',
+        courier: shippingMethod === 'armoured' ? 'Sequel Armoured Logistics' : 'Boutique Concierge Collection',
+        trackingNumber: 'SEQL-IN-' + Math.floor(1000000 + Math.random() * 9000000),
+        estimatedDelivery: 'Within 2 to 3 Business Days (Sequel Armoured)',
+        totalAmount: total,
+        paymentMethod: paymentMethod === 'upi' ? 'UPI (Google Pay / PhonePe)' : paymentMethod === 'card' ? 'Credit Card (Verified)' : 'Pay on Armoured Delivery',
+        huidNumber: 'HUID: AJ-916-ND' + Math.floor(1000 + Math.random() * 9000),
+        shippingAddress: `${formData.address}, ${formData.city}, ${formData.state} - ${formData.pincode}`,
+        items: checkoutData.items || []
+      };
+
       // Trigger celebration confetti
       try {
         confetti({
@@ -68,7 +85,7 @@ export default function CheckoutModal({
         console.log(err);
       }
 
-      if (onOrderSuccess) onOrderSuccess();
+      if (onOrderSuccess) onOrderSuccess(newOrder);
     }, 1500);
   };
 
@@ -505,16 +522,27 @@ export default function CheckoutModal({
 
             <div className="flex flex-wrap items-center justify-center gap-3 pt-2">
               <button
+                onClick={() => {
+                  onClose();
+                  if (onTrackOrder) onTrackOrder();
+                }}
+                className="px-5 py-2.5 bg-gradient-to-r from-[#D8A966] via-[#C99039] to-[#B2772B] hover:brightness-105 text-stone-950 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-1.5"
+              >
+                <Truck className="w-4 h-4" />
+                <span>Track Order In Account</span>
+              </button>
+
+              <button
                 onClick={() => window.print()}
-                className="px-5 py-2.5 bg-white border border-stone-300 hover:bg-stone-50 text-stone-700 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
+                className="px-4 py-2.5 bg-white border border-stone-300 hover:bg-stone-50 text-stone-700 text-xs font-semibold rounded-xl flex items-center gap-1.5 transition-colors cursor-pointer"
               >
                 <Printer className="w-4 h-4 text-stone-500" />
-                <span>Print Official Tax Invoice</span>
+                <span>Print Invoice</span>
               </button>
 
               <button
                 onClick={onClose}
-                className="px-6 py-2.5 bg-stone-900 hover:bg-stone-800 text-amber-300 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-xs"
+                className="px-5 py-2.5 bg-stone-900 hover:bg-stone-800 text-amber-300 text-xs font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-xs"
               >
                 Continue Shopping
               </button>
