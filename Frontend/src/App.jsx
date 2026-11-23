@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import AnnouncementBar from './components/Header/AnnouncementBar';
 import Navbar from './components/Header/Navbar';
 import HeroBanner from './components/Home/HeroBanner';
-import LiveRateBar from './components/Home/LiveRateBar';
 import CategoryGrid from './components/Home/CategoryGrid';
 import CollectionsShowcase from './components/Home/CollectionsShowcase';
 import ProductCard from './components/Home/ProductCard';
@@ -21,6 +20,15 @@ import GoldEssentialsCarousel from './components/Home/GoldEssentialsCarousel';
 import QuickCategoryStrip from './components/Home/QuickCategoryStrip';
 import FloatingConcierge from './components/Widgets/FloatingConcierge';
 
+// Dedicated Subnav Pages
+import PurityPage from './components/Pages/PurityPage';
+import CollectionsPage from './components/Pages/CollectionsPage';
+import CalculatorPage from './components/Pages/CalculatorPage';
+import DailyWearPage from './components/Pages/DailyWearPage';
+import MangalsutrasPage from './components/Pages/MangalsutrasPage';
+import GoldCoinsPage from './components/Pages/GoldCoinsPage';
+import ShowroomsPage from './components/Pages/ShowroomsPage';
+
 import { PRODUCTS, CATEGORIES, TESTIMONIALS } from './data/products';
 import { DEFAULT_USER } from './data/mockUser';
 import { formatINR } from './data/goldRates';
@@ -30,7 +38,7 @@ import {
 } from 'lucide-react';
 
 export default function App() {
-  // Page Routing State ('home' | 'shop') - Landing page is ALWAYS default
+  // Page Routing State ('home' | 'all-jewellery' | 'gold-9k-14k' | 'gold-22k' | 'collections' | 'calculator' | 'daily-wear' | 'mangalsutras' | 'gold-coins' | 'showrooms')
   const [currentPage, setCurrentPage] = useState('home');
 
   // Navigation & Category state
@@ -237,34 +245,30 @@ export default function App() {
     }
   };
 
-  // Navigation helpers
+  // Master Navigation Handlers
   const navigateToHome = () => {
     setCurrentPage('home');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const navigateToShopWithCategory = (catId = 'all') => {
-    setActiveCategory(catId);
-    setCurrentPage('shop');
+  const navigateToPage = (pageId, categoryId = 'all') => {
+    setActiveCategory(categoryId);
+    setCurrentPage(pageId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Filtered & Sorted Products Calculation
+  // Filtered & Sorted Products Calculation for Shop
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter(p => {
-      // Category filter
       if (activeCategory !== 'all' && p.category !== activeCategory) {
         return false;
       }
-      // Purity filter
       if (selectedPurity !== 'all' && p.purity !== selectedPurity) {
         return false;
       }
-      // Gender filter
       if (selectedGender !== 'all' && p.gender !== selectedGender && p.gender !== 'Unisex') {
         return false;
       }
-      // Price range filter
       if (selectedPriceRange === 'under50k' && p.price >= 50000) return false;
       if (selectedPriceRange === '50k-1lakh' && (p.price < 50000 || p.price > 100000)) return false;
       if (selectedPriceRange === '1lakh-2lakh' && (p.price < 100000 || p.price > 200000)) return false;
@@ -275,7 +279,7 @@ export default function App() {
       if (sortBy === 'price-asc') return a.price - b.price;
       if (sortBy === 'price-desc') return b.price - a.price;
       if (sortBy === 'rating') return b.rating - a.rating;
-      return 0; // default featured
+      return 0;
     });
   }, [activeCategory, selectedPurity, selectedGender, selectedPriceRange, sortBy]);
 
@@ -312,18 +316,19 @@ export default function App() {
       {/* Top Announcements & Live Rate Ticker */}
       <AnnouncementBar 
         onOpenCalculator={() => setIsCalculatorOpen(true)}
-        onOpenStoreLocator={() => setIsStoreLocatorOpen(true)}
+        onOpenStoreLocator={() => navigateToPage('showrooms')}
       />
 
-      {/* Luxury Brand Header & Navigation with User Account integration */}
+      {/* Luxury Brand Header & 2-Tier Subnav with Multi-page routing */}
       <Navbar
         currentPage={currentPage}
         onNavigateHome={navigateToHome}
+        onNavigatePage={navigateToPage}
         activeCategory={activeCategory}
-        onSelectCategory={navigateToShopWithCategory}
+        onSelectCategory={(catId) => navigateToPage('all-jewellery', catId)}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCalculator={() => setIsCalculatorOpen(true)}
-        onOpenStoreLocator={() => setIsStoreLocatorOpen(true)}
+        onOpenStoreLocator={() => navigateToPage('showrooms')}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenWishlist={() => setIsWishlistOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
@@ -334,32 +339,36 @@ export default function App() {
         cartTotal={cartTotal}
       />
 
-      {/* VIEW 1: LANDING PAGE (HOME) - Preserved as the default landing view */}
+      {/* ======================================================== */}
+      {/* DYNAMIC PAGE ROUTING CONTAINER                          */}
+      {/* ======================================================== */}
+
+      {/* 1. HOME LANDING PAGE */}
       {currentPage === 'home' && (
         <main className="flex-1 animate-in fade-in duration-300">
           
-          {/* Hero Showcase Banner */}
+          {/* Cinematic Full-Bleed Campaign Hero Banner (Right Gold Style) */}
           <HeroBanner 
-            onExploreCategory={navigateToShopWithCategory}
+            onExploreCategory={(cat) => navigateToPage('all-jewellery', cat)}
             onOpenCalculator={() => setIsCalculatorOpen(true)}
           />
 
           {/* Tabbed Circular Category Explorer (Gold, Diamond, LG Diamond) */}
-          <QuickCategoryStrip onSelectCategory={navigateToShopWithCategory} />
+          <QuickCategoryStrip onSelectCategory={(cat) => navigateToPage('all-jewellery', cat)} />
 
           {/* Signature 3D Gold Essentials Coverflow Carousel */}
           <GoldEssentialsCarousel 
-            onSelectCategory={navigateToShopWithCategory}
-            onExploreAll={() => navigateToShopWithCategory('all')}
+            onSelectCategory={(cat) => navigateToPage('all-jewellery', cat)}
+            onExploreAll={() => navigateToPage('all-jewellery', 'all')}
           />
 
           {/* Visual Category Showcase */}
-          <CategoryGrid onSelectCategory={navigateToShopWithCategory} />
+          <CategoryGrid onSelectCategory={(cat) => navigateToPage('all-jewellery', cat)} />
 
           {/* Editorial Curated Collections */}
-          <CollectionsShowcase onExploreCategory={navigateToShopWithCategory} />
+          <CollectionsShowcase onExploreCategory={(cat) => navigateToPage('all-jewellery', cat)} />
 
-          {/* Bestseller Spotlight Preview Section with link to Shop */}
+          {/* Bestseller Spotlight Preview Section */}
           <section className="py-16 bg-[#FAF8F5]">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               
@@ -374,7 +383,7 @@ export default function App() {
                 </div>
 
                 <button
-                  onClick={() => navigateToShopWithCategory('all')}
+                  onClick={() => navigateToPage('all-jewellery', 'all')}
                   className="inline-flex items-center gap-2 px-6 py-3 bg-[#1C1814] text-amber-300 hover:bg-[#2F271F] font-semibold text-xs rounded-xl shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
                 >
                   <span>Explore Full Catalogue ({PRODUCTS.length} Jewels)</span>
@@ -408,7 +417,7 @@ export default function App() {
                   </p>
                 </div>
                 <button
-                  onClick={() => navigateToShopWithCategory('all')}
+                  onClick={() => navigateToPage('all-jewellery', 'all')}
                   className="px-7 py-3.5 bg-gradient-to-r from-[#D8A966] via-[#C99039] to-[#B2772B] hover:brightness-110 text-stone-950 font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer whitespace-nowrap shadow-lg shrink-0"
                 >
                   View All Collections
@@ -467,8 +476,8 @@ export default function App() {
         </main>
       )}
 
-      {/* VIEW 2: DEDICATED CATALOGUE / SHOP PAGE */}
-      {currentPage === 'shop' && (
+      {/* 2. ALL JEWELLERY PAGE */}
+      {currentPage === 'all-jewellery' && (
         <main className="flex-1 animate-in fade-in duration-300">
           <ShopPage
             products={filteredProducts}
@@ -494,11 +503,121 @@ export default function App() {
         </main>
       )}
 
+      {/* 3. 9KT & 14KT GOLD PAGE */}
+      {currentPage === 'gold-9k-14k' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <PurityPage
+            type="9K-14K"
+            products={PRODUCTS}
+            onSelectProduct={(p) => setSelectedProduct(p)}
+            onQuickView={(p) => setSelectedProduct(p)}
+            onAddToCart={handleAddToCart}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+            onNavigateHome={navigateToHome}
+            onExploreAll={() => navigateToPage('all-jewellery', 'all')}
+          />
+        </main>
+      )}
+
+      {/* 4. 22K GOLD PAGE */}
+      {currentPage === 'gold-22k' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <PurityPage
+            type="22K"
+            products={PRODUCTS}
+            onSelectProduct={(p) => setSelectedProduct(p)}
+            onQuickView={(p) => setSelectedProduct(p)}
+            onAddToCart={handleAddToCart}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+            onNavigateHome={navigateToHome}
+            onExploreAll={() => navigateToPage('all-jewellery', 'all')}
+          />
+        </main>
+      )}
+
+      {/* 5. SIGNATURE COLLECTIONS PAGE */}
+      {currentPage === 'collections' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <CollectionsPage
+            onSelectCategory={(cat) => navigateToPage('all-jewellery', cat)}
+            onNavigateHome={navigateToHome}
+          />
+        </main>
+      )}
+
+      {/* 6. SOLITAIRE & BULLION CALCULATOR PAGE */}
+      {currentPage === 'calculator' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <CalculatorPage
+            onNavigateHome={navigateToHome}
+            onExploreCategory={(cat) => navigateToPage('all-jewellery', cat)}
+          />
+        </main>
+      )}
+
+      {/* 7. DAILY WEAR PAGE */}
+      {currentPage === 'daily-wear' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <DailyWearPage
+            products={PRODUCTS}
+            onSelectProduct={(p) => setSelectedProduct(p)}
+            onQuickView={(p) => setSelectedProduct(p)}
+            onAddToCart={handleAddToCart}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+            onNavigateHome={navigateToHome}
+            onExploreAll={() => navigateToPage('all-jewellery', 'all')}
+          />
+        </main>
+      )}
+
+      {/* 8. MANGALSUTRAS PAGE */}
+      {currentPage === 'mangalsutras' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <MangalsutrasPage
+            products={PRODUCTS}
+            onSelectProduct={(p) => setSelectedProduct(p)}
+            onQuickView={(p) => setSelectedProduct(p)}
+            onAddToCart={handleAddToCart}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+            onNavigateHome={navigateToHome}
+            onExploreAll={() => navigateToPage('all-jewellery', 'all')}
+          />
+        </main>
+      )}
+
+      {/* 9. GOLD COINS PAGE */}
+      {currentPage === 'gold-coins' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <GoldCoinsPage
+            products={PRODUCTS}
+            onSelectProduct={(p) => setSelectedProduct(p)}
+            onQuickView={(p) => setSelectedProduct(p)}
+            onAddToCart={handleAddToCart}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+            onNavigateHome={navigateToHome}
+          />
+        </main>
+      )}
+
+      {/* 10. SHOWROOMS PAGE */}
+      {currentPage === 'showrooms' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <ShowroomsPage
+            onNavigateHome={navigateToHome}
+          />
+        </main>
+      )}
+
       {/* Footer */}
       <Footer 
         onOpenCalculator={() => setIsCalculatorOpen(true)}
-        onOpenStoreLocator={() => setIsStoreLocatorOpen(true)}
-        onSelectCategory={navigateToShopWithCategory}
+        onOpenStoreLocator={() => navigateToPage('showrooms')}
+        onSelectCategory={(catId) => navigateToPage('all-jewellery', catId)}
       />
 
       {/* Product Detail Modal */}
@@ -516,7 +635,7 @@ export default function App() {
       <GoldRateCalculatorModal
         isOpen={isCalculatorOpen}
         onClose={() => setIsCalculatorOpen(false)}
-        onExploreCategory={navigateToShopWithCategory}
+        onExploreCategory={(cat) => navigateToPage('all-jewellery', cat)}
       />
 
       {/* Store Locator Modal */}
@@ -574,11 +693,11 @@ export default function App() {
         user={user}
         orders={orders}
         onLogout={handleLogout}
-        onExploreShop={() => navigateToShopWithCategory('all')}
+        onExploreShop={() => navigateToPage('all-jewellery', 'all')}
       />
 
       {/* Floating Concierge (Phone & WhatsApp) */}
-      <FloatingConcierge onOpenStoreLocator={() => setIsStoreLocatorOpen(true)} />
+      <FloatingConcierge onOpenStoreLocator={() => navigateToPage('showrooms')} />
 
     </div>
   );

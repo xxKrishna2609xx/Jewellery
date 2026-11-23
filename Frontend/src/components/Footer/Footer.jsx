@@ -1,63 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Diamond, ShieldCheck, Mail, Phone, MapPin, ArrowRight } from 'lucide-react';
 import { SHOWROOMS } from '../../data/products';
 
 export default function Footer({ onOpenCalculator, onOpenStoreLocator, onSelectCategory }) {
-  const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
-
-  const handleSubscribe = (e) => {
-    e.preventDefault();
-    if (email) {
-      setSubscribed(true);
-      setEmail('');
-    }
-  };
-
   return (
-    <footer className="bg-[#17130F] text-[#E8DFD3] pt-16 pb-12 border-t border-[#2F271E]">
+    <footer className="bg-[#17130F] text-[#E8DFD3] pt-12 pb-12 border-t border-[#2F271E]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        {/* Top Newsletter & Privilege Club Banner */}
-        <div className="bg-[#211B15] border border-[#3D3224] rounded-3xl p-6 sm:p-10 mb-16 flex flex-col lg:flex-row items-center justify-between gap-6 shadow-xl">
-          <div className="space-y-2 text-center lg:text-left max-w-xl">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-amber-400">
-              The Aura Connoisseurs Club
-            </span>
-            <h3 className="text-2xl sm:text-3xl font-serif font-bold text-white">
-              Receive Private Previews & Gold Rate Insights
-            </h3>
-            <p className="text-stone-400 text-xs sm:text-sm">
-              Subscribe to get exclusive invites to high-jewellery showcases, festival gold rate freezes, and design launches.
-            </p>
-          </div>
-
-          <div className="w-full lg:w-auto">
-            {subscribed ? (
-              <div className="p-3 bg-amber-500/20 border border-amber-400 text-amber-300 text-xs rounded-xl font-medium">
-                ✨ Welcome to the Connoisseurs Circle. Check your inbox shortly.
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="flex flex-col sm:flex-row gap-2 max-w-md w-full">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email address"
-                  className="px-4 py-3 bg-[#17130F] border border-[#4D3F2D] text-xs text-white placeholder:text-stone-500 rounded-xl focus:outline-none focus:border-amber-400 min-w-[260px]"
-                />
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-gradient-to-r from-[#D8A966] via-[#C99039] to-[#B2772B] hover:brightness-110 text-stone-950 font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer whitespace-nowrap shadow-md"
-                >
-                  Join Club
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-
         {/* Main Footer Links Columns */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
           

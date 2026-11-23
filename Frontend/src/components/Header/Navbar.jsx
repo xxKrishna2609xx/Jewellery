@@ -3,14 +3,12 @@ import {
   Search, Heart, ShoppingBag, Calculator, 
   Menu, X, Sparkles, ChevronDown, Diamond, Home, User, MapPin 
 } from 'lucide-react';
-import { CATEGORIES } from '../../data/products';
 import { formatINR } from '../../data/goldRates';
 
 export default function Navbar({
   currentPage = 'home',
   onNavigateHome,
-  activeCategory,
-  onSelectCategory,
+  onNavigatePage,
   onOpenSearch,
   onOpenCalculator,
   onOpenStoreLocator,
@@ -24,23 +22,17 @@ export default function Navbar({
   cartTotal = 0
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [navSearchQuery, setNavSearchQuery] = useState('');
-
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    onOpenSearch();
-  };
 
   const navLinks = [
-    { id: 'all', label: 'All Jewellery' },
-    { id: 'rings', label: '9KT & 14KT Gold', badge: 'New' },
-    { id: 'necklaces', label: '22K Gold' },
-    { id: 'earrings', label: 'Collections' },
-    { id: 'calculator', label: 'Solitaire Calculator', isAction: 'calc' },
-    { id: 'bangles', label: 'Daily Wear' },
+    { id: 'all-jewellery', label: 'All Jewellery' },
+    { id: 'gold-9k-14k', label: '9KT & 14KT Gold', badge: 'New' },
+    { id: 'gold-22k', label: '22K Gold' },
+    { id: 'collections', label: 'Collections' },
+    { id: 'calculator', label: 'Solitaire Calculator' },
+    { id: 'daily-wear', label: 'Daily Wear' },
     { id: 'mangalsutras', label: 'Mangalsutras' },
-    { id: 'coins', label: 'Gold Coins' },
-    { id: 'stores', label: 'Showrooms', isAction: 'store' }
+    { id: 'gold-coins', label: 'Gold Coins' },
+    { id: 'showrooms', label: 'Showrooms' }
   ];
 
   return (
@@ -110,7 +102,7 @@ export default function Navbar({
 
             {/* Store Locator Icon */}
             <button
-              onClick={onOpenStoreLocator}
+              onClick={() => onNavigatePage('showrooms')}
               className="p-2 text-stone-700 hover:text-[#4A102E] hover:bg-stone-50 rounded-full transition-colors cursor-pointer hidden lg:flex"
               title="Locate Boutique Showrooms"
               aria-label="Store locator"
@@ -189,25 +181,16 @@ export default function Navbar({
           <nav className="flex items-center justify-between py-2.5 text-[11px] xl:text-xs font-semibold tracking-wide">
             
             {navLinks.map((link) => {
-              const isActive = (link.id === 'all' && currentPage === 'shop' && activeCategory === 'all') ||
-                               (currentPage === 'shop' && activeCategory === link.id);
+              const isActive = currentPage === link.id;
 
               return (
                 <button
                   key={link.id}
-                  onClick={() => {
-                    if (link.isAction === 'calc') {
-                      onOpenCalculator();
-                    } else if (link.isAction === 'store') {
-                      onOpenStoreLocator();
-                    } else {
-                      onSelectCategory(link.id);
-                    }
-                  }}
-                  className={`flex items-center gap-1.5 px-2 py-0.5 rounded transition-all cursor-pointer relative whitespace-nowrap ${
+                  onClick={() => onNavigatePage(link.id)}
+                  className={`flex items-center gap-1.5 px-2.5 py-1 rounded transition-all cursor-pointer relative whitespace-nowrap ${
                     isActive 
-                      ? 'text-amber-300 font-bold' 
-                      : 'text-stone-200 hover:text-amber-300'
+                      ? 'text-amber-300 font-bold bg-white/10' 
+                      : 'text-stone-200 hover:text-amber-300 hover:bg-white/5'
                   }`}
                 >
                   <span>{link.label}</span>
@@ -245,23 +228,25 @@ export default function Navbar({
           <div className="grid grid-cols-2 gap-2 mb-4">
             <button
               onClick={() => { onNavigateHome(); setMobileMenuOpen(false); }}
-              className="text-left px-3 py-2 text-xs font-semibold rounded-lg bg-stone-100 text-stone-900"
+              className={`text-left px-3 py-2 text-xs font-semibold rounded-lg ${
+                currentPage === 'home' ? 'bg-[#4A102E] text-white font-bold' : 'bg-stone-100 text-stone-900'
+              }`}
             >
               Home Showcase
             </button>
-            <button
-              onClick={() => { onSelectCategory('all'); setMobileMenuOpen(false); }}
-              className="text-left px-3 py-2 text-xs font-semibold rounded-lg bg-stone-100 text-stone-900"
-            >
-              All Jewellery
-            </button>
-            {CATEGORIES.slice(1).map(c => (
+
+            {navLinks.map(link => (
               <button
-                key={c.id}
-                onClick={() => { onSelectCategory(c.id); setMobileMenuOpen(false); }}
-                className="text-left px-3 py-2 text-xs font-medium text-stone-700 hover:bg-stone-50"
+                key={link.id}
+                onClick={() => { onNavigatePage(link.id); setMobileMenuOpen(false); }}
+                className={`text-left px-3 py-2 text-xs font-semibold rounded-lg flex items-center justify-between ${
+                  currentPage === link.id ? 'bg-[#4A102E] text-white font-bold' : 'bg-stone-100 text-stone-900'
+                }`}
               >
-                {c.name}
+                <span>{link.label}</span>
+                {link.badge && (
+                  <span className="text-[9px] px-1 bg-[#F39C12] text-black rounded font-bold">{link.badge}</span>
+                )}
               </button>
             ))}
           </div>
