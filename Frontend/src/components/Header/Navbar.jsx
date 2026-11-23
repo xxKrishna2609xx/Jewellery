@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { 
   Search, Heart, ShoppingBag, Calculator, 
-  Menu, X, Sparkles, ChevronDown, Diamond 
+  Menu, X, Sparkles, ChevronDown, Diamond, Home 
 } from 'lucide-react';
 import { CATEGORIES } from '../../data/products';
 import { formatINR } from '../../data/goldRates';
 
 export default function Navbar({
+  currentPage = 'home',
+  onNavigateHome,
   activeCategory,
   onSelectCategory,
   onOpenSearch,
@@ -39,8 +41,9 @@ export default function Navbar({
 
           {/* Brand Identity / Logo */}
           <div 
-            onClick={() => { onSelectCategory('all'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+            onClick={() => { onNavigateHome(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
             className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group select-none shrink-0 py-1"
+            title="Go to Aura Jewels Home"
           >
             <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#E6CA85] via-[#C5A059] to-[#8E6928] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform duration-300 shrink-0">
               <Diamond className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
@@ -57,8 +60,22 @@ export default function Navbar({
 
           {/* Desktop Category Navigation */}
           <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 overflow-hidden">
+            <button
+              onClick={onNavigateHome}
+              className={`px-2.5 xl:px-3 py-1.5 text-[11px] xl:text-xs font-semibold uppercase tracking-wider rounded-md transition-all cursor-pointer relative whitespace-nowrap ${
+                currentPage === 'home'
+                  ? 'text-[#8E5822] font-bold' 
+                  : 'text-stone-700 hover:text-amber-800 hover:bg-[#F2ECE0]/60'
+              }`}
+            >
+              Home
+              {currentPage === 'home' && (
+                <span className="absolute bottom-0 left-2.5 right-2.5 h-[2px] bg-gradient-to-r from-amber-500 to-amber-700 rounded-full"></span>
+              )}
+            </button>
+
             {CATEGORIES.map((cat) => {
-              const isActive = activeCategory === cat.id;
+              const isActive = currentPage === 'shop' && activeCategory === cat.id;
               return (
                 <button
                   key={cat.id}
@@ -143,6 +160,20 @@ export default function Navbar({
         {mobileMenuOpen && (
           <div className="lg:hidden border-t border-[#E8DFD3] py-4 bg-[#FAF8F5] animate-in fade-in slide-in-from-top-2 duration-200">
             <div className="grid grid-cols-2 gap-2 mb-4">
+              <button
+                onClick={() => {
+                  onNavigateHome();
+                  setMobileMenuOpen(false);
+                }}
+                className={`text-left px-3 py-2.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
+                  currentPage === 'home'
+                    ? 'bg-amber-100/70 text-amber-900 font-bold'
+                    : 'text-stone-700 hover:bg-stone-100'
+                }`}
+              >
+                Home Showcase
+              </button>
+
               {CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
@@ -151,7 +182,7 @@ export default function Navbar({
                     setMobileMenuOpen(false);
                   }}
                   className={`text-left px-3 py-2.5 text-xs font-medium rounded-lg transition-colors cursor-pointer ${
-                    activeCategory === cat.id
+                    currentPage === 'shop' && activeCategory === cat.id
                       ? 'bg-amber-100/70 text-amber-900 font-bold'
                       : 'text-stone-700 hover:bg-stone-100'
                   }`}

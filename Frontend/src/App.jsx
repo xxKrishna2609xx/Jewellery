@@ -14,15 +14,19 @@ import CartDrawer from './components/Cart/CartDrawer';
 import WishlistDrawer from './components/Wishlist/WishlistDrawer';
 import CheckoutModal from './components/Checkout/CheckoutModal';
 import Footer from './components/Footer/Footer';
+import ShopPage from './components/Pages/ShopPage';
 
 import { PRODUCTS, CATEGORIES, TESTIMONIALS } from './data/products';
 import { formatINR } from './data/goldRates';
 import { 
-  Filter, SlidersHorizontal, Check, Sparkles, 
-  RotateCcw, Star, Quote, ShieldCheck, Award, Heart 
+  Sparkles, Star, Quote, ShieldCheck, 
+  ArrowRight, Award, Gem 
 } from 'lucide-react';
 
 export default function App() {
+  // Page Routing State ('home' | 'shop')
+  const [currentPage, setCurrentPage] = useState('home');
+
   // Navigation & Category state
   const [activeCategory, setActiveCategory] = useState('all');
 
@@ -31,7 +35,6 @@ export default function App() {
   const [selectedGender, setSelectedGender] = useState('all');
   const [selectedPriceRange, setSelectedPriceRange] = useState('all');
   const [sortBy, setSortBy] = useState('featured');
-  const [showFiltersMobile, setShowFiltersMobile] = useState(false);
 
   // Modals & Drawers state
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
@@ -155,6 +158,18 @@ export default function App() {
     setCart([]);
   };
 
+  // Navigation helpers
+  const navigateToHome = () => {
+    setCurrentPage('home');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const navigateToShopWithCategory = (catId = 'all') => {
+    setActiveCategory(catId);
+    setCurrentPage('shop');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Filtered & Sorted Products Calculation
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter(p => {
@@ -199,6 +214,11 @@ export default function App() {
   const cartCount = cart.reduce((acc, i) => acc + i.quantity, 0);
   const wishlistCount = wishlist.length;
 
+  // Bestsellers Spotlight (Top 4 picks on Landing Page)
+  const bestsellerSpotlight = useMemo(() => {
+    return PRODUCTS.slice(0, 4);
+  }, []);
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF8F5] text-stone-900 selection:bg-[#E5D7B7]">
       
@@ -218,14 +238,10 @@ export default function App() {
 
       {/* Luxury Brand Header & Navigation */}
       <Navbar
+        currentPage={currentPage}
+        onNavigateHome={navigateToHome}
         activeCategory={activeCategory}
-        onSelectCategory={(catId) => {
-          setActiveCategory(catId);
-          const catalogElem = document.getElementById('jewellery-catalogue');
-          if (catalogElem) {
-            catalogElem.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
+        onSelectCategory={navigateToShopWithCategory}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCalculator={() => setIsCalculatorOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
@@ -235,268 +251,165 @@ export default function App() {
         cartTotal={cartTotal}
       />
 
-      {/* Hero Showcase Banner */}
-      <HeroBanner 
-        onExploreCategory={(cat) => {
-          setActiveCategory(cat);
-          const catalogElem = document.getElementById('jewellery-catalogue');
-          if (catalogElem) {
-            catalogElem.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
-        onOpenCalculator={() => setIsCalculatorOpen(true)}
-      />
-
-      {/* Flagship Live Rates Index Widget (Right Gold Evolution) */}
-      <LiveRateBar onOpenCalculator={() => setIsCalculatorOpen(true)} />
-
-      {/* Visual Category Showcase */}
-      <CategoryGrid onSelectCategory={(catId) => {
-        setActiveCategory(catId);
-        const catalogElem = document.getElementById('jewellery-catalogue');
-        if (catalogElem) {
-          catalogElem.scrollIntoView({ behavior: 'smooth' });
-        }
-      }} />
-
-      {/* Editorial Curated Collections */}
-      <CollectionsShowcase onExploreCategory={(cat) => {
-        setActiveCategory(cat);
-        const catalogElem = document.getElementById('jewellery-catalogue');
-        if (catalogElem) {
-          catalogElem.scrollIntoView({ behavior: 'smooth' });
-        }
-      }} />
-
-      {/* Main E-Commerce Catalogue Section */}
-      <main id="jewellery-catalogue" className="py-16 bg-[#FAF8F5] scroll-mt-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* VIEW 1: LANDING PAGE (HOME) */}
+      {currentPage === 'home' && (
+        <main className="flex-1 animate-in fade-in duration-300">
           
-          {/* Catalogue Title & Filter Bar */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between pb-6 border-b border-[#DECDB3] gap-4 mb-8">
-            <div>
-              <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#8E5822]">
-                <span>Certified Haute Joaillerie</span>
-              </div>
-              <h2 className="text-2xl sm:text-4xl font-serif font-bold text-stone-900 mt-1">
-                {activeCategory === 'all' 
-                  ? 'All Fine Jewels' 
-                  : CATEGORIES.find(c => c.id === activeCategory)?.name || 'Collection'}
-              </h2>
-              <p className="text-xs sm:text-sm text-stone-500 mt-1">
-                Displaying {filteredProducts.length} BIS 916 hallmarked & certified creations.
-              </p>
-            </div>
+          {/* Hero Showcase Banner */}
+          <HeroBanner 
+            onExploreCategory={navigateToShopWithCategory}
+            onOpenCalculator={() => setIsCalculatorOpen(true)}
+          />
 
-            {/* Filter and Sort Controls */}
-            <div className="flex flex-wrap items-center gap-2.5">
+          {/* Flagship Live Rates Index Widget */}
+          <LiveRateBar onOpenCalculator={() => setIsCalculatorOpen(true)} />
+
+          {/* Visual Category Showcase */}
+          <CategoryGrid onSelectCategory={navigateToShopWithCategory} />
+
+          {/* Editorial Curated Collections */}
+          <CollectionsShowcase onExploreCategory={navigateToShopWithCategory} />
+
+          {/* Bestseller Spotlight Preview Section with link to Shop */}
+          <section className="py-16 bg-[#FAF8F5]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               
-              {/* Category Pills (Quick switch) */}
-              <div className="hidden lg:flex items-center gap-1.5 bg-[#F2ECE0]/80 p-1 rounded-xl border border-[#DECDB3]">
-                {CATEGORIES.slice(0, 5).map(cat => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveCategory(cat.id)}
-                    className={`px-3 py-1.5 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
-                      activeCategory === cat.id
-                        ? 'bg-[#1C1814] text-amber-300 shadow-xs'
-                        : 'text-stone-700 hover:text-stone-950'
-                    }`}
-                  >
-                    {cat.name}
-                  </button>
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between pb-6 border-b border-[#DECDB3] gap-4 mb-10">
+                <div>
+                  <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#8E5822] block mb-1">
+                    Couture Spotlight
+                  </span>
+                  <h2 className="text-3xl sm:text-4xl font-serif font-bold text-stone-900">
+                    Iconic Bestsellers
+                  </h2>
+                </div>
+
+                <button
+                  onClick={() => navigateToShopWithCategory('all')}
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-[#1C1814] text-amber-300 hover:bg-[#2F271F] font-semibold text-xs rounded-xl shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
+                >
+                  <span>Explore Full Catalogue ({PRODUCTS.length} Jewels)</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* 4 Featured Cards Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                {bestsellerSpotlight.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onSelect={(p) => setSelectedProduct(p)}
+                    onQuickView={(p) => setSelectedProduct(p)}
+                    onAddToCart={(p) => handleAddToCart(p)}
+                    onToggleWishlist={(p) => handleToggleWishlist(p)}
+                    isWishlisted={wishlist.some(item => item.id === product.id)}
+                  />
                 ))}
               </div>
 
-              {/* Sort By Dropdown */}
-              <div className="flex items-center gap-1.5 bg-white border border-stone-300 rounded-xl px-3 py-2 text-xs shadow-xs">
-                <span className="text-stone-400 font-medium">Sort:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-transparent font-semibold text-stone-800 focus:outline-none cursor-pointer"
-                >
-                  <option value="featured">Featured Curations</option>
-                  <option value="price-asc">Price: Low to High</option>
-                  <option value="price-desc">Price: High to Low</option>
-                  <option value="rating">Highest Rated</option>
-                </select>
-              </div>
-
-              {/* Reset Filters if any active */}
-              {isAnyFilterActive && (
-                <button
-                  onClick={resetFilters}
-                  className="flex items-center gap-1 px-3 py-2 bg-stone-100 hover:bg-stone-200 text-stone-700 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
-                  title="Clear all filters"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Reset</span>
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Filter Bar: Purity, Gender, and Price Range */}
-          <div className="bg-white p-4 rounded-2xl border border-stone-200/80 shadow-xs mb-8 flex flex-wrap items-center justify-between gap-4 text-xs">
-            <div className="flex flex-wrap items-center gap-4">
-              
-              {/* Purity Filter */}
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-stone-700 uppercase tracking-wider text-[11px]">Purity:</span>
-                <div className="flex gap-1">
-                  {['all', '24K', '22K', '18K', '14K'].map((p) => (
-                    <button
-                      key={p}
-                      onClick={() => setSelectedPurity(p)}
-                      className={`px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
-                        selectedPurity === p
-                          ? 'bg-amber-100 border-amber-500 text-amber-900 font-bold'
-                          : 'border-stone-200 bg-stone-50 text-stone-600 hover:border-stone-400'
-                      }`}
-                    >
-                      {p === 'all' ? 'All' : p}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Gender Filter */}
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-stone-700 uppercase tracking-wider text-[11px]">For:</span>
-                <div className="flex gap-1">
-                  {['all', 'Women', 'Men'].map((g) => (
-                    <button
-                      key={g}
-                      onClick={() => setSelectedGender(g)}
-                      className={`px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
-                        selectedGender === g
-                          ? 'bg-amber-100 border-amber-500 text-amber-900 font-bold'
-                          : 'border-stone-200 bg-stone-50 text-stone-600 hover:border-stone-400'
-                      }`}
-                    >
-                      {g === 'all' ? 'All' : g}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Price Range Filter */}
-              <div className="flex items-center gap-1.5">
-                <span className="font-bold text-stone-700 uppercase tracking-wider text-[11px]">Price:</span>
-                <select
-                  value={selectedPriceRange}
-                  onChange={(e) => setSelectedPriceRange(e.target.value)}
-                  className="bg-stone-50 border border-stone-200 rounded-lg px-2.5 py-1 font-medium text-stone-800 focus:outline-none cursor-pointer"
-                >
-                  <option value="all">All Budgets</option>
-                  <option value="under50k">Under ₹50,000</option>
-                  <option value="50k-1lakh">₹50,000 - ₹1,00,000</option>
-                  <option value="1lakh-2lakh">₹1,00,000 - ₹2,00,000</option>
-                  <option value="above2lakh">Above ₹2,00,000</option>
-                </select>
-              </div>
-
-            </div>
-
-            <div className="text-[11px] text-stone-500 font-medium">
-              Real-time Indian Bullion Pricing Applied
-            </div>
-          </div>
-
-          {/* Product Cards Grid */}
-          {filteredProducts.length === 0 ? (
-            <div className="py-24 text-center bg-white rounded-3xl border border-stone-200 p-8 space-y-4">
-              <Sparkles className="w-12 h-12 text-amber-600 mx-auto" />
-              <h3 className="font-serif text-2xl font-bold text-stone-800">
-                No matching creations found
-              </h3>
-              <p className="text-xs text-stone-500 max-w-sm mx-auto">
-                Try loosening your filters or resetting the category to explore our complete collection.
-              </p>
-              <button
-                onClick={resetFilters}
-                className="px-6 py-2.5 bg-stone-900 text-amber-300 font-semibold text-xs rounded-xl hover:bg-stone-800 transition-colors cursor-pointer"
-              >
-                Reset All Filters
-              </button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredProducts.map((product) => (
-                <ProductCard
-                  key={product.id}
-                  product={product}
-                  onSelect={(p) => setSelectedProduct(p)}
-                  onQuickView={(p) => setSelectedProduct(p)}
-                  onAddToCart={(p) => handleAddToCart(p)}
-                  onToggleWishlist={(p) => handleToggleWishlist(p)}
-                  isWishlisted={wishlist.some(item => item.id === product.id)}
-                />
-              ))}
-            </div>
-          )}
-
-        </div>
-      </main>
-
-      {/* Customer Trust & Testimonials */}
-      <section className="py-16 bg-[#F4EFE6]/60 border-t border-[#DECDB3]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          
-          <div className="text-center max-w-xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#8E5822] block mb-2">
-              Patron Experiences
-            </span>
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-stone-900">
-              Trusted by Discerning Families
-            </h2>
-            <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-3"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            {TESTIMONIALS.map((t, idx) => (
-              <div 
-                key={idx}
-                className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4 flex flex-col justify-between"
-              >
-                <div className="space-y-3">
-                  <div className="flex items-center text-amber-400 gap-1">
-                    {[...Array(t.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400" />
-                    ))}
-                  </div>
-                  <Quote className="w-8 h-8 text-amber-200 stroke-1" />
-                  <p className="text-xs sm:text-sm text-stone-700 leading-relaxed italic">
-                    "{t.text}"
+              {/* Bottom CTA Banner */}
+              <div className="mt-12 p-8 bg-gradient-to-r from-[#211B15] to-[#362A1F] text-[#FAF6F0] rounded-3xl border border-[#3D3224] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+                <div>
+                  <h3 className="text-2xl font-serif font-bold text-white">
+                    Looking for a Specific Jewel or Bullion Coin?
+                  </h3>
+                  <p className="text-xs sm:text-sm text-stone-300 mt-1 max-w-xl">
+                    Browse our full collection with multi-carat diamond filters, purity options (14K to 24K), and real-time bullion pricing.
                   </p>
                 </div>
-
-                <div className="pt-4 border-t border-stone-100">
-                  <h4 className="font-serif font-bold text-stone-900 text-sm">{t.name}</h4>
-                  <div className="flex items-center justify-between text-[11px] text-stone-500 mt-0.5">
-                    <span>{t.city}</span>
-                    <span className="text-amber-800 font-medium truncate max-w-[150px]">{t.itemPurchased}</span>
-                  </div>
-                </div>
+                <button
+                  onClick={() => navigateToShopWithCategory('all')}
+                  className="px-7 py-3.5 bg-gradient-to-r from-[#D8A966] via-[#C99039] to-[#B2772B] hover:brightness-110 text-stone-950 font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer whitespace-nowrap shadow-lg shrink-0"
+                >
+                  View All Collections
+                </button>
               </div>
-            ))}
-          </div>
 
-        </div>
-      </section>
+            </div>
+          </section>
+
+          {/* Customer Trust & Testimonials */}
+          <section className="py-16 bg-[#F4EFE6]/60 border-t border-[#DECDB3]">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              
+              <div className="text-center max-w-xl mx-auto mb-12">
+                <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#8E5822] block mb-2">
+                  Patron Experiences
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-serif font-bold text-stone-900">
+                  Trusted by Discerning Families
+                </h2>
+                <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-3"></div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+                {TESTIMONIALS.map((t, idx) => (
+                  <div 
+                    key={idx}
+                    className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4 flex flex-col justify-between"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center text-amber-400 gap-1">
+                        {[...Array(t.rating)].map((_, i) => (
+                          <Star key={i} className="w-4 h-4 fill-amber-400" />
+                        ))}
+                      </div>
+                      <Quote className="w-8 h-8 text-amber-200 stroke-1" />
+                      <p className="text-xs sm:text-sm text-stone-700 leading-relaxed italic">
+                        "{t.text}"
+                      </p>
+                    </div>
+
+                    <div className="pt-4 border-t border-stone-100">
+                      <h4 className="font-serif font-bold text-stone-900 text-sm">{t.name}</h4>
+                      <div className="flex items-center justify-between text-[11px] text-stone-500 mt-0.5">
+                        <span>{t.city}</span>
+                        <span className="text-amber-800 font-medium truncate max-w-[150px]">{t.itemPurchased}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </section>
+
+        </main>
+      )}
+
+      {/* VIEW 2: DEDICATED CATALOGUE / SHOP PAGE */}
+      {currentPage === 'shop' && (
+        <main className="flex-1 animate-in fade-in duration-300">
+          <ShopPage
+            products={filteredProducts}
+            activeCategory={activeCategory}
+            onSelectCategory={(catId) => setActiveCategory(catId)}
+            selectedPurity={selectedPurity}
+            setSelectedPurity={setSelectedPurity}
+            selectedGender={selectedGender}
+            setSelectedGender={setSelectedGender}
+            selectedPriceRange={selectedPriceRange}
+            setSelectedPriceRange={setSelectedPriceRange}
+            sortBy={sortBy}
+            setSortBy={setSortBy}
+            onResetFilters={resetFilters}
+            isAnyFilterActive={isAnyFilterActive}
+            onSelectProduct={(p) => setSelectedProduct(p)}
+            onQuickView={(p) => setSelectedProduct(p)}
+            onAddToCart={handleAddToCart}
+            onToggleWishlist={handleToggleWishlist}
+            wishlist={wishlist}
+            onNavigateHome={navigateToHome}
+          />
+        </main>
+      )}
 
       {/* Footer */}
       <Footer 
         onOpenCalculator={() => setIsCalculatorOpen(true)}
         onOpenStoreLocator={() => setIsStoreLocatorOpen(true)}
-        onSelectCategory={(catId) => {
-          setActiveCategory(catId);
-          const catalogElem = document.getElementById('jewellery-catalogue');
-          if (catalogElem) {
-            catalogElem.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
+        onSelectCategory={navigateToShopWithCategory}
       />
 
       {/* Product Detail Modal */}
@@ -514,13 +427,7 @@ export default function App() {
       <GoldRateCalculatorModal
         isOpen={isCalculatorOpen}
         onClose={() => setIsCalculatorOpen(false)}
-        onExploreCategory={(cat) => {
-          setActiveCategory(cat);
-          const catalogElem = document.getElementById('jewellery-catalogue');
-          if (catalogElem) {
-            catalogElem.scrollIntoView({ behavior: 'smooth' });
-          }
-        }}
+        onExploreCategory={navigateToShopWithCategory}
       />
 
       {/* Store Locator Modal */}
