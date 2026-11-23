@@ -18,6 +18,7 @@ import ShopPage from './components/Pages/ShopPage';
 import AuthModal from './components/Auth/AuthModal';
 import AccountModal from './components/Account/AccountModal';
 import GoldEssentialsCarousel from './components/Home/GoldEssentialsCarousel';
+import QuickCategoryStrip from './components/Home/QuickCategoryStrip';
 import FloatingConcierge from './components/Widgets/FloatingConcierge';
 
 import { PRODUCTS, CATEGORIES, TESTIMONIALS } from './data/products';
@@ -342,8 +343,8 @@ export default function App() {
             onOpenCalculator={() => setIsCalculatorOpen(true)}
           />
 
-          {/* Flagship Live Rates Index Widget */}
-          <LiveRateBar onOpenCalculator={() => setIsCalculatorOpen(true)} />
+          {/* Tabbed Circular Category Explorer (Gold, Diamond, LG Diamond) */}
+          <QuickCategoryStrip onSelectCategory={navigateToShopWithCategory} />
 
           {/* Signature 3D Gold Essentials Coverflow Carousel */}
           <GoldEssentialsCarousel 
