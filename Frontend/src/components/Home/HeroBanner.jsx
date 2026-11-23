@@ -1,234 +1,222 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Sparkles, ArrowRight, ShieldCheck, RefreshCw, 
-  Award, Truck, ChevronLeft, ChevronRight, Diamond 
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from 'lucide-react';
 
 export default function HeroBanner({ onExploreCategory, onOpenCalculator }) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
   const slides = [
     {
-      title: "The Regal Bridal Collection",
-      subtitle: "Pure 22 Karat BIS Hallmarked Heritage Polki & Temple Jewels crafted for grand celebrations.",
-      tag: "Bridal Couture 2026",
-      cta: "Explore Bridal Jewels",
-      category: "necklaces",
-      badgeHighlight: "BIS 916 Hallmarked",
-      badgePurity: "22K Pure Gold",
-      image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1000&auto=format&fit=crop"
+      id: 'diamonds',
+      titleLine1: 'Diamond Days',
+      titleLine2: 'Are Here',
+      category: 'rings',
+      bgColor: 'from-[#3B0A22] via-[#4F0F2E] to-[#250414]',
+      silkAccent: 'bg-[#531032]',
+      tagline: 'Exquisite Rose Gold & Natural Diamond Suites',
+      dealPrimary: 'Flat 20% Off',
+      dealPrimarySub: 'on Diamond Value',
+      dealSecondary: '₹2,100/-*',
+      dealSecondarySub: 'Gift voucher on every purchase',
+      ctaText: 'Shop Now',
+      couponCode: 'DIA20',
+      jewelleryImage: 'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=1000&auto=format&fit=crop',
+      websiteUrl: 'www.aurajewels.com'
     },
     {
-      title: "Solitaire Radiance & Fine Diamonds",
-      subtitle: "IGI Certified Natural Solitaires mounted in Solid 18K Gold with unmatched brilliance.",
-      tag: "Forever Solitaires",
-      cta: "Discover Solitaires",
-      category: "rings",
-      badgeHighlight: "IGI & SGL Certified",
-      badgePurity: "VVS1 Clarity",
-      image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=1000&auto=format&fit=crop"
+      id: 'bridal',
+      titleLine1: 'Royal Bridal',
+      titleLine2: 'Couture 2026',
+      category: 'necklaces',
+      bgColor: 'from-[#2D1606] via-[#422108] to-[#1C0D03]',
+      silkAccent: 'bg-[#4A2408]',
+      tagline: 'Imperial 22K Kundan, Polki & Basra Pearl Masterpieces',
+      dealPrimary: 'Up to 25% Off',
+      dealPrimarySub: 'on Making Charges',
+      dealSecondary: 'Free 24K Coin',
+      dealSecondarySub: 'with every bridal set above ₹2 Lakh',
+      ctaText: 'Explore Bridal',
+      couponCode: 'ROYAL25',
+      jewelleryImage: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1000&auto=format&fit=crop',
+      websiteUrl: 'www.aurajewels.com'
     },
     {
-      title: "Daily Elegance & Lightweight Gold",
-      subtitle: "Modern 14K & 18K Italian finish chains, bangles and studs engineered for daily effortless elegance.",
-      tag: "Everyday Luxury",
-      cta: "Shop Daily Wear",
-      category: "bangles",
-      badgeHighlight: "Feather-Light Wear",
-      badgePurity: "14K & 18K Gold",
-      image: "https://images.unsplash.com/photo-1611591475883-9b81a7042a5a?q=80&w=1000&auto=format&fit=crop"
+      id: 'daily',
+      titleLine1: 'Everyday Fine',
+      titleLine2: 'Gold Radiance',
+      category: 'bangles',
+      bgColor: 'from-[#1A162B] via-[#2D2447] to-[#120E1F]',
+      silkAccent: 'bg-[#322852]',
+      tagline: 'Feather-Light 14K & 18K Solid Gold Essentials',
+      dealPrimary: 'Starting at ₹9,999',
+      dealPrimarySub: 'Zero Deductions on Exchange',
+      dealSecondary: 'Zero Making Fee',
+      dealSecondarySub: 'on select Italian chains & studs',
+      ctaText: 'Discover Daily Wear',
+      couponCode: 'EVERYDAY',
+      jewelleryImage: 'https://images.unsplash.com/photo-1611591475883-9b81a7042a5a?q=80&w=1000&auto=format&fit=crop',
+      websiteUrl: 'www.aurajewels.com'
     }
   ];
 
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000);
+    }, 6500);
     return () => clearInterval(timer);
   }, [slides.length]);
 
   const slide = slides[currentSlide];
 
+  const handlePrev = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
+
+  const handleNext = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-[#F7F3EB] via-[#FAF8F5] to-[#F5EFE6] border-b border-[#DECDB3]">
+    <div className="relative overflow-hidden select-none">
       
-      {/* Decorative ambient gold glow circles */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-amber-300/15 rounded-full blur-3xl pointer-events-none -translate-y-1/2"></div>
-      <div className="absolute bottom-0 left-10 w-80 h-80 bg-amber-200/20 rounded-full blur-2xl pointer-events-none translate-y-1/3"></div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 relative z-10">
+      {/* Full-Bleed Cinematic Banner Frame */}
+      <div className={`relative min-h-[480px] sm:min-h-[520px] lg:min-h-[560px] bg-gradient-to-r ${slide.bgColor} text-white transition-all duration-700 flex items-center`}>
         
-        {/* 2-Column Responsive Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          {/* Left Column: Editorial Headline & Actions (7 cols) */}
-          <div className="lg:col-span-7 space-y-6 text-left">
+        {/* Subtle Liquid Silk Shimmer Background Effect */}
+        <div className="absolute inset-0 opacity-40 mix-blend-overlay bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-rose-200 via-transparent to-transparent pointer-events-none"></div>
+
+        {/* Content Grid */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 w-full relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
-            {/* Pill Tag */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#FAF3E5] border border-[#DECA9F] shadow-2xs">
-              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
-              <span className="text-xs font-bold uppercase tracking-[0.2em] text-[#7A531C]">
-                {slide.tag}
-              </span>
-            </div>
-
-            {/* Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#1C1814] tracking-tight leading-[1.12]">
-              {slide.title}
-            </h1>
-
-            {/* Subtitle */}
-            <p className="text-stone-600 text-sm sm:text-base font-normal leading-relaxed max-w-xl">
-              {slide.subtitle}
-            </p>
-
-            {/* Action Buttons */}
-            <div className="pt-2 flex flex-wrap items-center gap-3.5 sm:gap-4">
-              <button
-                onClick={() => onExploreCategory(slide.category)}
-                className="px-7 py-3.5 bg-gradient-to-r from-[#D8A966] via-[#C99039] to-[#B2772B] hover:brightness-105 text-stone-950 font-bold text-xs uppercase tracking-widest rounded-full shadow-lg transition-all flex items-center gap-2 cursor-pointer group active:scale-95"
-              >
-                <span>{slide.cta}</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </button>
-
-              <button
-                onClick={onOpenCalculator}
-                className="px-6 py-3.5 bg-white hover:bg-stone-50 text-stone-800 font-semibold text-xs uppercase tracking-wider rounded-full border border-stone-300 shadow-xs transition-all cursor-pointer active:scale-95"
-              >
-                Calculate Live Gold Value
-              </button>
-            </div>
-
-            {/* Slide Navigation Dots */}
-            <div className="pt-4 flex items-center gap-3">
-              <div className="flex items-center gap-2">
-                {slides.map((_, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentSlide(idx)}
-                    className={`h-2 rounded-full transition-all cursor-pointer ${
-                      currentSlide === idx ? 'w-8 bg-amber-600' : 'w-2.5 bg-stone-300 hover:bg-stone-400'
-                    }`}
-                    aria-label={`Slide ${idx + 1}`}
-                  />
-                ))}
-              </div>
-              <span className="text-[11px] font-semibold text-stone-500 uppercase tracking-wider">
-                0{currentSlide + 1} / 0{slides.length}
-              </span>
-            </div>
-
-          </div>
-
-          {/* Right Column: High-Definition Jewellery Showcase Image (5 cols) */}
-          <div className="lg:col-span-5 relative">
-            <div className="relative mx-auto max-w-md lg:max-w-none">
-              
-              {/* Outer Golden Glow Border */}
-              <div className="p-2.5 sm:p-3 bg-white/90 rounded-3xl border border-[#DECDB3] shadow-2xl backdrop-blur-sm relative group overflow-hidden">
+            {/* Left Column: High-Fashion Jewellery Arrangement on Silk (6 cols) */}
+            <div className="lg:col-span-6 flex items-center justify-center order-2 lg:order-1">
+              <div className="relative w-full max-w-md lg:max-w-lg aspect-[4/3] sm:aspect-[16/11] rounded-3xl overflow-hidden shadow-2xl border border-white/10 group">
+                <img
+                  src={slide.jewelleryImage}
+                  alt={slide.titleLine1}
+                  className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                  loading="eager"
+                />
                 
-                {/* Main Showcase Image Tag */}
-                <div className="aspect-[4/5] sm:aspect-square lg:aspect-[4/5] rounded-2xl overflow-hidden bg-stone-100 relative">
-                  <img
-                    key={slide.image}
-                    src={slide.image}
-                    alt={slide.title}
-                    className="w-full h-full object-cover transition-all duration-700 transform group-hover:scale-105"
-                    loading="eager"
-                  />
-                  
-                  {/* Subtle inner soft vignette */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-stone-950/40 via-transparent to-transparent pointer-events-none"></div>
+                {/* Silk Satin Caustics Sheen Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-white/10 pointer-events-none"></div>
 
-                  {/* Floating Purity Badge (Top Right) */}
-                  <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full border border-stone-200 shadow-md flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-                    <span className="text-xs font-bold text-stone-900 uppercase tracking-wider">
-                      {slide.badgeHighlight}
+                {/* Floating Tag */}
+                <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/20 text-xs font-semibold text-amber-200 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                  <span>BIS 916 Hallmarked Certified Suite</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column: Commercial Luxury Campaign Typography (6 cols) */}
+            <div className="lg:col-span-6 space-y-5 text-center lg:text-left order-1 lg:order-2">
+              
+              {/* Disclaimer header */}
+              <div className="flex items-center justify-center lg:justify-end text-[10px] uppercase tracking-widest text-stone-300/80 font-medium">
+                *T&C Apply
+              </div>
+
+              {/* Bold Campaign Headline (Right Gold style) */}
+              <div className="space-y-1">
+                <h2 className="text-4xl sm:text-6xl lg:text-7xl font-sans font-black tracking-tight text-white leading-[1.05]">
+                  {slide.titleLine1}
+                </h2>
+                <h3 className="text-3xl sm:text-5xl lg:text-6xl font-serif italic text-amber-200 tracking-tight leading-[1.1]">
+                  {slide.titleLine2}
+                </h3>
+              </div>
+
+              {/* Deal Breakdown Strip (Matching Right Gold Photo) */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 sm:gap-6 text-white">
+                
+                {/* Primary Deal */}
+                <div className="flex items-baseline gap-2">
+                  <span className="text-xs font-semibold uppercase text-amber-300">Flat</span>
+                  <div className="text-left">
+                    <span className="text-2xl sm:text-3xl font-black font-sans tracking-tight text-white block leading-none">
+                      {slide.dealPrimary.replace('Flat ', '')}
+                    </span>
+                    <span className="text-[11px] text-stone-300 font-medium">
+                      {slide.dealPrimarySub}
                     </span>
                   </div>
+                </div>
 
-                  {/* Floating Title Strip (Bottom Left) */}
-                  <div className="absolute bottom-4 left-4 right-4 bg-stone-950/80 backdrop-blur-md p-3.5 rounded-xl border border-white/20 text-white flex items-center justify-between">
-                    <div>
-                      <span className="text-[10px] text-amber-300 uppercase font-bold tracking-widest block">
-                        Aura Certified Masterpiece
-                      </span>
-                      <span className="font-serif font-bold text-sm text-stone-100">
-                        {slide.badgePurity}
-                      </span>
-                    </div>
+                {/* Vertical Divider */}
+                <span className="hidden sm:inline-block w-px h-10 bg-white/30"></span>
 
-                    <button
-                      onClick={() => onExploreCategory(slide.category)}
-                      className="p-2 rounded-full bg-amber-500 text-stone-950 hover:bg-amber-400 transition-colors cursor-pointer"
-                      title="View Details"
-                    >
-                      <ArrowRight className="w-4 h-4" />
-                    </button>
-                  </div>
-
+                {/* Secondary Deal */}
+                <div className="text-center sm:text-left">
+                  <span className="text-2xl sm:text-3xl font-black font-sans tracking-tight text-white block leading-none">
+                    {slide.dealSecondary}
+                  </span>
+                  <span className="text-[11px] text-stone-300 font-medium">
+                    {slide.dealSecondarySub}
+                  </span>
                 </div>
 
               </div>
 
-            </div>
-          </div>
+              {/* Call to Action Button & Coupon */}
+              <div className="pt-4 flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
+                <button
+                  onClick={() => onExploreCategory(slide.category)}
+                  className="px-8 py-3.5 bg-white hover:bg-amber-100 text-[#4A102E] font-black text-xs uppercase tracking-widest rounded-full shadow-2xl transition-all cursor-pointer transform hover:scale-105 active:scale-95 flex items-center gap-2"
+                >
+                  <span>{slide.ctaText}</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
 
-        </div>
+                <div className="text-xs text-stone-200">
+                  Apply coupon code: <span className="font-mono font-bold text-amber-300 bg-white/10 px-2.5 py-1 rounded-md border border-white/20 tracking-wider ml-1">{slide.couponCode}</span>
+                </div>
+              </div>
 
-      </div>
-
-      {/* Trust Badges Strip (Light Luxury Styling) */}
-      <div className="bg-[#F2ECE0]/70 border-t border-[#DECDB3] py-4">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center sm:text-left">
-            
-            <div className="flex items-center gap-3 justify-center sm:justify-start">
-              <div className="p-2.5 rounded-full bg-amber-600/10 text-amber-800 shrink-0">
-                <ShieldCheck className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-stone-900 uppercase tracking-wider">100% BIS Hallmarked</h4>
-                <p className="text-[11px] text-stone-500">Laser HUID verified on every gram</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 justify-center sm:justify-start">
-              <div className="p-2.5 rounded-full bg-amber-600/10 text-amber-800 shrink-0">
-                <Award className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-stone-900 uppercase tracking-wider">IGI & SGL Certified</h4>
-                <p className="text-[11px] text-stone-500">100% natural, conflict-free diamonds</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 justify-center sm:justify-start">
-              <div className="p-2.5 rounded-full bg-amber-600/10 text-amber-800 shrink-0">
-                <RefreshCw className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-stone-900 uppercase tracking-wider">Lifetime Buyback</h4>
-                <p className="text-[11px] text-stone-500">Zero deduction transparent exchange</p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 justify-center sm:justify-start">
-              <div className="p-2.5 rounded-full bg-amber-600/10 text-amber-800 shrink-0">
-                <Truck className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-stone-900 uppercase tracking-wider">Insured Doorstep Transit</h4>
-                <p className="text-[11px] text-stone-500">Free tamper-proof armoured delivery</p>
-              </div>
             </div>
 
           </div>
         </div>
+
+        {/* Carousel Circular Left Arrow Button */}
+        <button
+          onClick={handlePrev}
+          className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer active:scale-90"
+          aria-label="Previous Campaign"
+        >
+          <ChevronLeft className="w-5 h-5" />
+        </button>
+
+        {/* Carousel Circular Right Arrow Button */}
+        <button
+          onClick={handleNext}
+          className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-black/40 hover:bg-black/70 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all cursor-pointer active:scale-90"
+          aria-label="Next Campaign"
+        >
+          <ChevronRight className="w-5 h-5" />
+        </button>
+
+        {/* Bottom Left Branding Watermark */}
+        <div className="absolute bottom-3 left-6 text-[11px] font-sans text-white/60 hidden sm:block tracking-wider">
+          {slide.websiteUrl}
+        </div>
+
+        {/* Carousel Indicators at Bottom */}
+        <div className="absolute bottom-3 inset-x-0 flex items-center justify-center gap-2 z-20">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => setCurrentSlide(idx)}
+              className={`rounded-full transition-all cursor-pointer ${
+                currentSlide === idx ? 'w-6 h-2 bg-amber-400' : 'w-2 h-2 bg-white/40 hover:bg-white/70'
+              }`}
+              aria-label={`Slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+
       </div>
 
-    </section>
+    </div>
   );
 }

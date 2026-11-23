@@ -323,6 +323,7 @@ export default function App() {
         onSelectCategory={navigateToShopWithCategory}
         onOpenSearch={() => setIsSearchOpen(true)}
         onOpenCalculator={() => setIsCalculatorOpen(true)}
+        onOpenStoreLocator={() => setIsStoreLocatorOpen(true)}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenWishlist={() => setIsWishlistOpen(true)}
         onOpenAuth={() => setIsAuthOpen(true)}
