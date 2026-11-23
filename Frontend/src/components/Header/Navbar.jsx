@@ -40,30 +40,30 @@ export default function Navbar({
           {/* Brand Identity / Logo */}
           <div 
             onClick={() => { onSelectCategory('all'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="flex items-center gap-3 cursor-pointer group select-none"
+            className="flex items-center gap-2.5 sm:gap-3 cursor-pointer group select-none shrink-0 py-1"
           >
-            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E6CA85] via-[#C5A059] to-[#8E6928] flex items-center justify-center shadow-sm group-hover:scale-105 transition-transform duration-300">
-              <Diamond className="w-5 h-5 text-white" />
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#E6CA85] via-[#C5A059] to-[#8E6928] flex items-center justify-center shadow-xs group-hover:scale-105 transition-transform duration-300 shrink-0">
+              <Diamond className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
             </div>
-            <div className="flex flex-col">
-              <span className="font-display text-xl sm:text-2xl font-bold tracking-[0.2em] text-[#1C1814] uppercase group-hover:text-[#A77B28] transition-colors">
+            <div className="flex flex-col justify-center">
+              <span className="font-display text-lg sm:text-xl xl:text-2xl font-bold tracking-[0.14em] text-[#1C1814] uppercase group-hover:text-[#A77B28] transition-colors whitespace-nowrap leading-none">
                 Aura Jewels
               </span>
-              <span className="text-[9px] uppercase tracking-[0.35em] text-[#8C7A65] font-semibold -mt-0.5">
+              <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.25em] text-[#8C7A65] font-semibold whitespace-nowrap leading-none mt-1">
                 Haute Joaillerie • 1984
               </span>
             </div>
           </div>
 
           {/* Desktop Category Navigation */}
-          <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 overflow-hidden">
             {CATEGORIES.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
                 <button
                   key={cat.id}
                   onClick={() => onSelectCategory(cat.id)}
-                  className={`px-3 py-2 text-xs font-semibold uppercase tracking-wider rounded-md transition-all cursor-pointer relative ${
+                  className={`px-2 xl:px-3 py-1.5 text-[11px] xl:text-xs font-semibold uppercase tracking-wider rounded-md transition-all cursor-pointer relative whitespace-nowrap ${
                     isActive 
                       ? 'text-[#8E5822] font-bold' 
                       : 'text-stone-700 hover:text-amber-800 hover:bg-[#F2ECE0]/60'
@@ -71,7 +71,7 @@ export default function Navbar({
                 >
                   {cat.name}
                   {isActive && (
-                    <span className="absolute bottom-0 left-3 right-3 h-[2px] bg-gradient-to-r from-amber-500 to-amber-700 rounded-full"></span>
+                    <span className="absolute bottom-0 left-2 right-2 h-[2px] bg-gradient-to-r from-amber-500 to-amber-700 rounded-full"></span>
                   )}
                 </button>
               );
@@ -79,7 +79,7 @@ export default function Navbar({
           </nav>
 
           {/* Action Tools (Calculator, Search, Wishlist, Cart) */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
             
             {/* Live Price Calculator Quick Trigger */}
             <button
