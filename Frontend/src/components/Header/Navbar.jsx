@@ -36,7 +36,7 @@ export default function Navbar({
   ];
 
   return (
-    <header className="sticky top-0 z-30 bg-white transition-all duration-300 shadow-xs">
+    <header className="sticky top-0 z-40 bg-white transition-all duration-300 shadow-sm w-full">
       
       {/* Tier 1: Main Header Row (White Luxury Background) */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5">

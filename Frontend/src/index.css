@@ -23,11 +23,11 @@
   --color-luxury-accent: #B38738;
 }
 
-body {
+html, body {
   font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   background-color: #FAF8F5;
   color: #1c1917;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 h1, h2, h3, .font-serif {

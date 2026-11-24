@@ -257,7 +257,7 @@ export default function CalculatorPage({ onNavigateHome }) {
     <div className="min-h-screen bg-[#FAF8F5] text-stone-900 pb-16">
       
       {/* 1. Subheader Bar (Exact Right Gold Style) */}
-      <div className="bg-white border-b border-stone-200 py-3.5 px-4 sm:px-6 lg:px-8 sticky top-16 z-20 shadow-2xs">
+      <div className="bg-white border-b border-stone-200 py-3.5 px-4 sm:px-6 lg:px-8 shadow-2xs">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           
           <div className="flex items-center gap-3">

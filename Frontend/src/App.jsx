@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import AnnouncementBar from './components/Header/AnnouncementBar';
 import Navbar from './components/Header/Navbar';
 import HeroBanner from './components/Home/HeroBanner';
 import CategoryGrid from './components/Home/CategoryGrid';
@@ -312,12 +311,6 @@ export default function App() {
           <span>{toastMessage}</span>
         </div>
       )}
-
-      {/* Top Announcements & Live Rate Ticker */}
-      <AnnouncementBar 
-        onOpenCalculator={() => setIsCalculatorOpen(true)}
-        onOpenStoreLocator={() => navigateToPage('showrooms')}
-      />
 
       {/* Luxury Brand Header & 2-Tier Subnav with Multi-page routing */}
       <Navbar
