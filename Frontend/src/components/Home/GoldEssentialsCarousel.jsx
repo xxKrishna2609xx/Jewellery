@@ -127,7 +127,7 @@ export default function GoldEssentialsCarousel({ onSelectCategory, onExploreAll 
   };
 
   return (
-    <section className="py-16 sm:py-20 bg-gradient-to-b from-[#F7F2EC] via-[#FAF6F2] to-[#F5EFE9] overflow-hidden relative border-b border-[#DECDB3]/80">
+    <section className="py-20 bg-[#FAF8F5] overflow-hidden relative border-b border-stone-200/70">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
         
         {/* Section Heading matching the reference */}

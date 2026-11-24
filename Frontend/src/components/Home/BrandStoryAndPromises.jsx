@@ -280,17 +280,17 @@ export default function BrandStoryAndPromises({ onOpenCalculator, onExploreBrida
             </p>
 
             {/* Action Buttons */}
-            <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-4">
+            <div className="pt-3 flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <button
                 onClick={onExploreBridal}
-                className="px-6 py-3 bg-[#4A102E] hover:bg-[#380C23] text-amber-200 font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer shadow-md flex items-center gap-2 hover:scale-102"
+                className="px-6 py-3 bg-stone-900 hover:bg-stone-800 text-amber-200 font-semibold text-xs uppercase tracking-wider rounded-full transition-all cursor-pointer shadow-2xs flex items-center gap-2"
               >
                 <span>Explore Bridal Haute Joaillerie</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </button>
               <button
                 onClick={togglePlay}
-                className="px-5 py-3 border border-[#C59239] hover:bg-[#FAF3E5] text-[#8E5822] font-semibold text-xs rounded-xl transition-all cursor-pointer flex items-center gap-2"
+                className="px-5 py-3 border border-stone-300 hover:border-stone-400 bg-white hover:bg-stone-50 text-stone-700 font-medium text-xs rounded-full transition-all cursor-pointer flex items-center gap-2"
               >
                 {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
                 <span>{isPlaying ? 'Pause Film' : 'Play Brand Film'}</span>
@@ -311,10 +311,10 @@ export default function BrandStoryAndPromises({ onOpenCalculator, onExploreBrida
             <h2 className="text-3xl sm:text-4xl font-serif font-bold text-[#4A102E] tracking-tight">
               Aura Jewels Promises
             </h2>
-            <div className="w-16 h-0.5 bg-[#C59239] mx-auto mt-2.5"></div>
+            <div className="w-12 h-0.5 bg-[#C59239] mx-auto mt-2.5"></div>
           </div>
 
-          {/* 6 Cards Grid */}
+          {/* 6 Cards Grid (Minimalist Styling) */}
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-5">
             {promises.map((promise) => {
               const isClickable = Boolean(promise.action);
@@ -323,12 +323,12 @@ export default function BrandStoryAndPromises({ onOpenCalculator, onExploreBrida
                 <div
                   key={promise.id}
                   onClick={promise.action ? promise.action : undefined}
-                  className={`bg-white rounded-2xl p-4 sm:p-5 border border-[#4A102E]/25 hover:border-[#4A102E] shadow-2xs hover:shadow-md transition-all duration-300 flex flex-col items-center text-center justify-between min-h-[190px] group ${
-                    isClickable ? 'cursor-pointer hover:-translate-y-1' : ''
+                  className={`bg-white rounded-2xl p-4 sm:p-5 border border-stone-200/80 hover:border-stone-400 shadow-2xs hover:shadow-xs transition-all duration-300 flex flex-col items-center text-center justify-between min-h-[190px] group ${
+                    isClickable ? 'cursor-pointer hover:-translate-y-0.5' : ''
                   }`}
                 >
                   {/* Top Icon / Badge */}
-                  <div className="w-14 h-14 rounded-2xl bg-[#FAF3E5] border border-[#DECA9F]/60 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
+                  <div className="w-12 h-12 rounded-xl bg-stone-50 border border-stone-200/60 flex items-center justify-center mb-3 group-hover:scale-105 transition-transform duration-300">
                     {promise.badge ? (
                       <span className="font-serif font-extrabold text-2xl text-[#5A1434] tracking-tight">
                         {promise.badge}
@@ -350,8 +350,8 @@ export default function BrandStoryAndPromises({ onOpenCalculator, onExploreBrida
 
                   {/* Interactive Hint for Calculator */}
                   {isClickable && (
-                    <div className="mt-2 text-[9px] font-bold text-[#5A1434] uppercase tracking-wider group-hover:underline flex items-center gap-1">
-                      <span>Launch Calculator</span>
+                    <div className="mt-2 text-[9px] font-semibold text-[#5A1434] uppercase tracking-wider group-hover:underline flex items-center gap-1">
+                      <span>Calculate Piece</span>
                       <ArrowRight className="w-2.5 h-2.5" />
                     </div>
                   )}

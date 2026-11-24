@@ -406,19 +406,19 @@ export default function App() {
                 ))}
               </div>
 
-              {/* Bottom CTA Banner */}
-              <div className="mt-12 p-8 bg-gradient-to-r from-[#211B15] to-[#362A1F] text-[#FAF6F0] rounded-3xl border border-[#3D3224] flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-                <div>
-                  <h3 className="text-2xl font-serif font-bold text-white">
+              {/* Bottom Minimalist CTA Banner */}
+              <div className="mt-14 p-8 sm:p-10 bg-white rounded-2xl border border-stone-200/80 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-2xs">
+                <div className="space-y-1 text-center sm:text-left">
+                  <h3 className="text-xl sm:text-2xl font-serif font-bold text-stone-900">
                     Looking for a Specific Jewel or Bullion Coin?
                   </h3>
-                  <p className="text-xs sm:text-sm text-stone-300 mt-1 max-w-xl">
+                  <p className="text-xs sm:text-sm text-stone-500 max-w-xl">
                     Browse our full collection with multi-carat diamond filters, purity options (14K to 24K), and real-time bullion pricing.
                   </p>
                 </div>
                 <button
                   onClick={() => navigateToPage('all-jewellery', 'all')}
-                  className="px-7 py-3.5 bg-gradient-to-r from-[#D8A966] via-[#C99039] to-[#B2772B] hover:brightness-110 text-stone-950 font-bold text-xs uppercase tracking-widest rounded-xl transition-all cursor-pointer whitespace-nowrap shadow-lg shrink-0"
+                  className="px-6 py-3 bg-stone-900 hover:bg-stone-800 text-amber-200 font-semibold text-xs uppercase tracking-wider rounded-full transition-all cursor-pointer whitespace-nowrap shadow-2xs shrink-0"
                 >
                   View All Collections
                 </button>
@@ -428,42 +428,42 @@ export default function App() {
           </section>
 
           {/* Customer Trust & Testimonials */}
-          <section className="py-16 bg-[#F4EFE6]/60 border-t border-[#DECDB3]">
+          <section className="py-20 bg-[#FAF8F5] border-t border-stone-200/70">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               
               <div className="text-center max-w-xl mx-auto mb-12">
-                <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#8E5822] block mb-2">
+                <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#8E5822] block mb-1.5">
                   Patron Experiences
                 </span>
                 <h2 className="text-3xl sm:text-4xl font-serif font-bold text-stone-900">
                   Trusted by Discerning Families
                 </h2>
-                <div className="w-16 h-0.5 bg-amber-600 mx-auto mt-3"></div>
+                <div className="w-12 h-0.5 bg-[#C59239] mx-auto mt-3"></div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
                 {TESTIMONIALS.map((t, idx) => (
                   <div 
                     key={idx}
-                    className="bg-white p-6 sm:p-8 rounded-3xl border border-stone-200 shadow-xs space-y-4 flex flex-col justify-between"
+                    className="bg-white p-6 sm:p-8 rounded-2xl border border-stone-200/70 shadow-2xs space-y-4 flex flex-col justify-between"
                   >
                     <div className="space-y-3">
-                      <div className="flex items-center text-amber-400 gap-1">
+                      <div className="flex items-center text-amber-500 gap-1">
                         {[...Array(t.rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-amber-400" />
+                          <Star key={i} className="w-3.5 h-3.5 fill-amber-400" />
                         ))}
                       </div>
-                      <Quote className="w-8 h-8 text-amber-200 stroke-1" />
-                      <p className="text-xs sm:text-sm text-stone-700 leading-relaxed italic">
+                      <Quote className="w-6 h-6 text-stone-300 stroke-1" />
+                      <p className="text-xs sm:text-sm text-stone-600 leading-relaxed italic">
                         "{t.text}"
                       </p>
                     </div>
 
                     <div className="pt-4 border-t border-stone-100">
                       <h4 className="font-serif font-bold text-stone-900 text-sm">{t.name}</h4>
-                      <div className="flex items-center justify-between text-[11px] text-stone-500 mt-0.5">
+                      <div className="flex items-center justify-between text-[11px] text-stone-400 mt-0.5">
                         <span>{t.city}</span>
-                        <span className="text-amber-800 font-medium truncate max-w-[150px]">{t.itemPurchased}</span>
+                        <span className="text-stone-700 font-medium truncate max-w-[150px]">{t.itemPurchased}</span>
                       </div>
                     </div>
                   </div>

@@ -4,7 +4,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 
 export default function CollectionsShowcase({ onExploreCategory }) {
   return (
-    <section className="py-16 bg-[#F4EFE6]/70 border-y border-[#DECDB3]/70">
+    <section className="py-20 bg-[#FAF8F5] border-y border-stone-200/70">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 gap-4">

@@ -4,6 +4,7 @@ import {
   Menu, X, Sparkles, ChevronDown, Diamond, Home, User, MapPin 
 } from 'lucide-react';
 import { formatINR } from '../../data/goldRates';
+import AllJewelleryMegaMenu from './AllJewelleryMegaMenu';
 
 export default function Navbar({
   currentPage = 'home',
@@ -22,6 +23,7 @@ export default function Navbar({
   cartTotal = 0
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isMegaMenuOpen, setIsMegaMenuOpen] = useState(false);
 
   const navLinks = [
     { id: 'all-jewellery', label: 'All Jewellery' },
@@ -87,64 +89,64 @@ export default function Navbar({
             </div>
           </div>
 
-          {/* Action Tools (Right Gold Style) */}
+          {/* Action Tools (Minimal Luxury Style) */}
           <div className="flex items-center gap-2 sm:gap-4 shrink-0">
             
             {/* Today's Gold Rate Quick Button */}
             <button
               onClick={onOpenCalculator}
-              className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold text-[#5A1434] bg-[#FAF3E5] hover:bg-[#F5EAD4] border border-[#DECA9F] rounded-full transition-all cursor-pointer shadow-2xs hover:shadow-xs"
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 text-xs font-semibold text-stone-700 bg-stone-50 hover:bg-stone-100 border border-stone-200 rounded-full transition-all cursor-pointer shadow-2xs hover:border-stone-300"
               title="Click for Real-time Bullion Calculator"
             >
-              <div className="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500"></div>
               <span>Today's Gold Rate</span>
             </button>
 
             {/* Store Locator Icon */}
             <button
               onClick={() => onNavigatePage('showrooms')}
-              className="p-2 text-stone-700 hover:text-[#4A102E] hover:bg-stone-50 rounded-full transition-colors cursor-pointer hidden lg:flex"
+              className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-50 rounded-full transition-colors cursor-pointer hidden lg:flex"
               title="Locate Boutique Showrooms"
               aria-label="Store locator"
             >
-              <MapPin className="w-5 h-5 stroke-[1.75]" />
+              <MapPin className="w-4 h-4 stroke-[1.75]" />
             </button>
 
             {/* User Account / Profile */}
             {user ? (
               <button
                 onClick={onOpenAccount}
-                className="flex items-center gap-1.5 p-1 sm:px-2.5 sm:py-1 bg-[#FAF3E5] hover:bg-[#F5EAD4] border border-[#E3CEAB] rounded-full text-xs font-semibold text-stone-900 transition-all cursor-pointer shadow-2xs"
+                className="flex items-center gap-1.5 px-2.5 py-1 bg-stone-50 hover:bg-stone-100 border border-stone-200 rounded-full text-xs font-medium text-stone-900 transition-all cursor-pointer shadow-2xs"
                 title="My Vault Account & Orders"
               >
-                <div className="w-6 h-6 rounded-full bg-[#4A102E] text-amber-300 flex items-center justify-center text-[10px] font-bold">
+                <div className="w-5 h-5 rounded-full bg-stone-900 text-amber-200 flex items-center justify-center text-[9px] font-bold">
                   {user.name ? user.name[0] : 'U'}
                 </div>
-                <span className="hidden xl:inline font-serif font-bold text-stone-900 text-[11px]">
+                <span className="hidden xl:inline text-stone-800 text-[11px] font-semibold">
                   {user.name.split(' ')[0]}
                 </span>
               </button>
             ) : (
               <button
                 onClick={onOpenAuth}
-                className="p-2 text-stone-700 hover:text-[#4A102E] hover:bg-stone-50 rounded-full transition-colors cursor-pointer"
+                className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-50 rounded-full transition-colors cursor-pointer"
                 title="Sign In / Register"
                 aria-label="Account"
               >
-                <User className="w-5 h-5 stroke-[1.75]" />
+                <User className="w-4 h-4 stroke-[1.75]" />
               </button>
             )}
 
             {/* Wishlist Heart */}
             <button
               onClick={onOpenWishlist}
-              className="p-2 text-stone-700 hover:text-rose-600 hover:bg-stone-50 rounded-full transition-colors relative cursor-pointer"
+              className="p-2 text-stone-600 hover:text-stone-900 hover:bg-stone-50 rounded-full transition-colors relative cursor-pointer"
               title="Saved Jewels"
               aria-label="Wishlist"
             >
-              <Heart className="w-5 h-5 stroke-[1.75]" />
+              <Heart className="w-4 h-4 stroke-[1.75]" />
               {wishlistCount > 0 && (
-                <span className="absolute top-1 right-1 w-4 h-4 bg-rose-600 text-white text-[10px] font-bold rounded-full flex items-center justify-center animate-pulse">
+                <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-stone-900 text-white text-[9px] font-bold rounded-full flex items-center justify-center">
                   {wishlistCount}
                 </span>
               )}
@@ -153,21 +155,17 @@ export default function Navbar({
             {/* Shopping Bag */}
             <button
               onClick={onOpenCart}
-              className="flex items-center gap-1.5 p-2 sm:px-3 sm:py-1.5 text-stone-700 hover:text-[#4A102E] hover:bg-stone-50 rounded-full transition-colors relative cursor-pointer"
+              className="flex items-center gap-2 px-3 py-1.5 bg-stone-900 hover:bg-stone-800 text-white rounded-full transition-all cursor-pointer shadow-2xs text-xs font-medium"
               title="Shopping Bag"
               aria-label="Cart"
             >
-              <div className="relative">
-                <ShoppingBag className="w-5 h-5 stroke-[1.75]" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1.5 -right-1.5 w-4 h-4 bg-[#4A102E] text-amber-300 text-[10px] font-extrabold rounded-full flex items-center justify-center">
-                    {cartCount}
-                  </span>
-                )}
-              </div>
-              <span className="hidden xl:inline text-xs font-bold text-stone-800">
-                {cartCount > 0 ? formatINR(cartTotal) : 'Bag'}
-              </span>
+              <ShoppingBag className="w-3.5 h-3.5" />
+              <span>{cartCount}</span>
+              {cartCount > 0 && (
+                <span className="hidden xl:inline text-amber-200 text-[11px] font-normal border-l border-white/20 pl-1.5">
+                  {formatINR(cartTotal)}
+                </span>
+              )}
             </button>
 
           </div>
@@ -181,12 +179,19 @@ export default function Navbar({
           <nav className="flex items-center justify-between py-2.5 text-[11px] xl:text-xs font-semibold tracking-wide">
             
             {navLinks.map((link) => {
-              const isActive = currentPage === link.id;
+              const isActive = (currentPage === link.id && !isMegaMenuOpen) || (link.id === 'all-jewellery' && isMegaMenuOpen);
 
               return (
                 <button
                   key={link.id}
-                  onClick={() => onNavigatePage(link.id)}
+                  onClick={() => {
+                    if (link.id === 'all-jewellery') {
+                      setIsMegaMenuOpen(!isMegaMenuOpen);
+                    } else {
+                      setIsMegaMenuOpen(false);
+                      onNavigatePage(link.id);
+                    }
+                  }}
                   className={`flex items-center gap-1.5 px-2.5 py-1 rounded transition-all cursor-pointer relative whitespace-nowrap ${
                     isActive 
                       ? 'text-amber-300 font-bold bg-white/10' 
@@ -194,6 +199,9 @@ export default function Navbar({
                   }`}
                 >
                   <span>{link.label}</span>
+                  {link.id === 'all-jewellery' && (
+                    <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${isMegaMenuOpen ? 'rotate-180 text-amber-300' : 'text-stone-300'}`} />
+                  )}
                   {link.badge && (
                     <span className="text-[9px] font-bold px-1.5 py-0.2 bg-[#F39C12] text-stone-950 rounded-full uppercase">
                       {link.badge}
@@ -209,6 +217,20 @@ export default function Navbar({
           </nav>
         </div>
       </div>
+
+      {/* All Jewellery Mega Menu Flyout Panel (Right Gold Style) */}
+      <AllJewelleryMegaMenu
+        isOpen={isMegaMenuOpen}
+        onClose={() => setIsMegaMenuOpen(false)}
+        onSelectCategory={(category) => {
+          setIsMegaMenuOpen(false);
+          onNavigatePage('all-jewellery', category);
+        }}
+        onViewAllCatalogue={() => {
+          setIsMegaMenuOpen(false);
+          onNavigatePage('all-jewellery', 'all');
+        }}
+      />
 
       {/* Mobile Drawer Navigation */}
       {mobileMenuOpen && (
