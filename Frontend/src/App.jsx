@@ -17,6 +17,7 @@ import AuthModal from './components/Auth/AuthModal';
 import AccountModal from './components/Account/AccountModal';
 import GoldEssentialsCarousel from './components/Home/GoldEssentialsCarousel';
 import QuickCategoryStrip from './components/Home/QuickCategoryStrip';
+import BrandStoryAndPromises from './components/Home/BrandStoryAndPromises';
 import FloatingConcierge from './components/Widgets/FloatingConcierge';
 
 // Dedicated Subnav Pages
@@ -357,6 +358,12 @@ export default function App() {
 
           {/* Visual Category Showcase */}
           <CategoryGrid onSelectCategory={(cat) => navigateToPage('all-jewellery', cat)} />
+
+          {/* Cinematic Brand Story & 6 Promises Section */}
+          <BrandStoryAndPromises 
+            onOpenCalculator={() => setIsCalculatorOpen(true)}
+            onExploreBridal={() => navigateToPage('all-jewellery', 'necklaces')}
+          />
 
           {/* Editorial Curated Collections */}
           <CollectionsShowcase onExploreCategory={(cat) => navigateToPage('all-jewellery', cat)} />
